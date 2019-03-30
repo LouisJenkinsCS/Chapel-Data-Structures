@@ -3,6 +3,6 @@
 Data Structures written in Chapel.
 
 - [x] Priority Queue
-- [  ] Queue
-- [  ] Stack
-- [  ] Vector
+- [ ] Queue
+- [ ] Stack
+- [ ] Vector
