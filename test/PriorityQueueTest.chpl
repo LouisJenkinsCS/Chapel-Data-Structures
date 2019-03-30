@@ -1,4 +1,5 @@
 use Random;
+use PriorityQueue;
 
 config const nElems = 1024 * 1024;
 var pq = new PriorityQueue(int);
