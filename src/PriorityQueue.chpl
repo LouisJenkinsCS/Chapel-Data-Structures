@@ -139,6 +139,10 @@ class PriorityQueue {
         // Special case: Should eliminate any existing 'owned' objects to prevent memory leakage.
         if isOwnedClass(eltType) then [a in arr] a.clear();
     }
+
+    proc isEmpty() {
+      return this.size == 0;
+    }
 }
 
 
