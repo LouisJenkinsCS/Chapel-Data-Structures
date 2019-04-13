@@ -11,5 +11,7 @@ jobs:
     - script: |
         docker run -it -v ${TRAVIS_BUILD_DIR}:/repo.git -w /repo.git chapel/chapel:1.19.0 /bin/bash -c '
         cd test
+        start_test
+        cd ../example
         start_test'
    
