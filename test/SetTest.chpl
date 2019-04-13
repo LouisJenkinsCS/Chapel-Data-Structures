@@ -1,3 +1,5 @@
+use Set;
+
 // Creates sets in various ways; used to test for compiler errors introduced in newer
 // releases of chapel.
 proc initTest() {
@@ -19,4 +21,9 @@ proc initTest() {
   // Create a set from a parallel iterable
   var set5 = new Set([i in 1..10] i * 2);
   assert(set5.type == set4.type);
+}
+
+proc main() {
+  initTest();
+  writeln("SUCCESS!");
 }
