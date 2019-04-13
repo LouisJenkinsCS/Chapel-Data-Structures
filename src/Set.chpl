@@ -35,21 +35,111 @@ class Set {
     this.eltType = other.eltType;
     this.dom = other.dom;
   }
+  
+  // Adds a single element
+  proc add(e : eltType) {
+    this.dom += e;
+  }
+  
+  // Adds elements from an iterable
+  proc add(ir : _iteratorRecord) {
+    for e in ir do dom += e;
+  }
+
+  // Adds items from object which supports iteration
+  proc add(other) {
+    assert(__primitive("method call resolves", other, "these"), "Iterable of type `", other.type : string, "` does not support iteration!");
+    add(other.these());
+  }
+  
+  // Removes element from set
+  proc remove(e : eltType) {
+    this.dom -= e;
+  }
+  
+  // Removes all elements from set yielded by iterator
+  proc remove(ir : _iteratorRecord) {
+    for e in ir do dom -= e;
+  }
+  
+  // Remove elements from object which supports iteration
+  proc remove(other) {
+    assert(__primitive("method call resolves", other, "these"), "Iterable of type `", other.type : string, "` does not support iteration!");
+    remove(other.these());
+  }
+
+  iter these() const ref {
+    for e in dom do yield e;
+  }
+
+  iter these(param tag : iterKind) const ref where tag == iterKind.standalone {
+    forall e in dom do yield e;
+  }
+
+  proc readWriteThis(f) {
+    f <~> new ioLiteral("Set(") <~> eltType : string <~> new ioLiteral(") = ") <~> dom;
+  }
+}
+
+proc |(set1 : Set(?eltType), set2 : Set(eltType)) const : owned Set(eltType) {
+  return new owned Set(set1.dom | set2.dom);
+}
+
+proc |(set1 : Set(?eltType), other) const : owned Set(eltType) {
+  return set1 | new Set(other);
+}
+
+proc |=(ref set1 : Set(?eltType), set2 : Set(eltType)) {
+  set1.dom |= set2.dom;
+}
+
+proc |=(ref set1 : Set(?eltType), other) {
+  set1 |= new Set(other);
+}
+
+proc +(set1 : Set(?eltType), set2 : Set(eltType)) const : owned Set(eltType) {
+  return new owned Set(set1.dom + set2.dom);
+}
+
+proc +=(ref set1 : Set(?eltType), set2 : Set(eltType)) {
+  set1.dom += set2.dom;
+}
+
+proc -(set1 : Set(?eltType), set2 : Set(eltType)) const : owned Set(eltType) {
+  return new owned Set(set1.dom - set2.dom);
+}
+
+proc -=(ref set1 : Set(?eltType), set2 : Set(eltType)) {
+  set1.dom -= set2.dom;
+}
+
+proc &(set1 : Set(?eltType), set2 : Set(eltType)) const : owned Set(eltType) {
+  return new owned Set(set1.dom & set2.dom);
+}
+
+proc &=(set1 : Set(?eltType), set2 : Set(eltType)) {
+  set1.dom &= set2.dom;
+}
+
+proc ^(set1 : Set(?eltType), set2 : Set(eltType)) const : owned Set(eltType) {
+  return set1.dom ^ set2.dom;
+}
+
+proc ^=(ref set1 : Set(?eltType), set2 : Set(eltType)) {
+  set1.dom ^= set2.dom;
+}
+
+proc =(ref set1 : Set(?eltType), set2 : Set(eltType)) {
+  set1.dom = set2.dom;
+}
+
+proc =(ref set : Set(?eltType), other) {
+  set = new Set(other);
 }
 
 proc main() {
-  // Create empty set...
-  var set1 = new Set(int);
-  // Create set form original set
-  var set2 = new Set(set1);
-  assert(set1.type == set2.type);
-  
-  // Create a set from a domain
-  var dom : domain(int);
-  var set3 = new Set(dom);
-  assert(set3.type == set2.type && set3.type == dom.idxType);
-  
-  // Create a set from an iterable
-  var set4 = new Set(1..10);
-  assert(set4.type == set3.type);
+  var set1 = new Set(1..10);
+  var set2 = new Set(11..20);
+  var set3 = set1 | set2;
+  writeln(set3);
 }
