@@ -9,6 +9,6 @@ services:
 jobs:
   include:
     - script: |
-        docker run -it -v ${TRAVIS_BUILD_DIR}:/repo.git -w /repo.git louisjenkinscs/chapel-experimental:chapel-1.19.0 /bin/bash -c '
+        docker run -it -v ${TRAVIS_BUILD_DIR}:/repo.git -w /repo.git louisjenkinscs/chapel-experimental:chapel-1.19 /bin/bash -c '
         start_test test example'
    
